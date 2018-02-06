@@ -8,6 +8,11 @@ module eightbit_alu(
 	);
 	// module-local registers
 	reg [7:0] f_reg, ovf_reg, take_branch_reg;
+	// continuous assignment to outputs from module-local registers
+	assign f = f_reg;
+	assign ovf = ovf_reg;
+	assign take_branch = take_branch_reg;
+	
 	always @(a, b, s) begin
 		// operations on 'f'
 		case(s)
@@ -25,8 +30,4 @@ module eightbit_alu(
 		// 'take_branch' special cases
 		take_branch_reg = ((s == 6) && (a == b)) || ((s == 7) && (a != b));
 	end
-	// continuous assignment to outputs from module-local registers
-	assign f = f_reg;
-	assign ovf = ovf_reg;
-	assign take_branch = take_branch_reg;
 endmodule
