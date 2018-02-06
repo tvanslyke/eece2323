@@ -3,7 +3,7 @@ OUTPUT_DIRECTORY = tex-output
 TEXFLAGS = --output-directory=./$(OUTPUT_DIRECTORY)
 VIEWER = xdg-open
 
-report.pdf: report.tex
+report.pdf: report.tex verilog/*
 	
 	# make directory for pdflatex output if it doesn't already exist
 	if [ ! -d "$(OUTPUT_DIRECTORY)" ]; then mkdir $(OUTPUT_DIRECTORY); fi

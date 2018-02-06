@@ -5,6 +5,36 @@
 \usepackage{titling}
 \usepackage{xcolor}
 
+% Palatino font for text and math 
+\usepackage{mathpazo}
+% Bera Mono font for monospace text (code blocks)
+\usepackage[scaled]{beramono}
+\usepackage[T1]{fontenc}
+
+% Syntax highlighting for Verilog code snippets
+\usepackage{listings}
+\definecolor{vgreen}{RGB}{104,180,104}
+\definecolor{vblue}{RGB}{49,49,255}
+\definecolor{vorange}{RGB}{255,143,102}
+
+\lstdefinestyle{verilog-style}
+{
+    language=Verilog,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{vblue},
+    identifierstyle=\color{black},
+    commentstyle=\color{vgreen},
+    tabsize=2,  % small tab size so code doesn't run off the right-hand-side margin
+    literate=*{:}{:}1
+}
+
+
+
+
+
+
+
+
 \title{Lab \# 1-3: \textbf{8-Bit Adder, Partial Arithmetic Logic Unit, and Arithmetic Logic Unit}}
 
 % I just copied your name as it appeared in gmail - Tim
@@ -89,6 +119,10 @@
 
 %%%%%% APPENDICES %%%%%%
 \appendix
-% \section{ ... }
+\section{Lab 3 ALU Verilog Module}
+\lstinputlisting[style=verilog-style]{verilog/eightbit_alu.v}
+
+
+
 
 \end{document}
