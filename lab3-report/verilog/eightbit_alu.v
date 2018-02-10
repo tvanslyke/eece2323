@@ -12,7 +12,6 @@ module eightbit_alu(
 	assign f = f_reg;
 	assign ovf = ovf_reg;
 	assign take_branch = take_branch_reg;
-	
 	always @(a, b, s) begin
 		// operations on 'f'
 		case(s)
@@ -26,7 +25,7 @@ module eightbit_alu(
 			7: f_reg = 0;
 		endcase
 		// overflow check for addition
-		ovf_reg = (s == 0) && ((f[7] != a[7]) || (f[7] != b[7]));
+		ovf_reg = (s == 0) && (f[7] != a[7]) && (f[7] != b[7]);
 		// 'take_branch' special cases
 		take_branch_reg = ((s == 6) && (a == b)) || ((s == 7) && (a != b));
 	end

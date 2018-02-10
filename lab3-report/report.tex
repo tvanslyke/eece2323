@@ -4,7 +4,10 @@
 \usepackage{graphicx}
 \usepackage{titling}
 \usepackage{xcolor}
-
+\usepackage{appendix}
+% so that we can use \FloatBarrier to keep figures from being
+% moved to weird spots
+\usepackage{placeins}
 % Palatino font for text and math 
 \usepackage{mathpazo}
 % Bera Mono font for monospace text (code blocks)
@@ -16,11 +19,11 @@
 \definecolor{vgreen}{RGB}{104,180,104}
 \definecolor{vblue}{RGB}{49,49,255}
 \definecolor{vorange}{RGB}{255,143,102}
-
+% style definition for verilog code
 \lstdefinestyle{verilog-style}
 {
     language=Verilog,
-    basicstyle=\small\ttfamily,
+    basicstyle=\footnotesize\ttfamily,
     keywordstyle=\color{vblue},
     identifierstyle=\color{black},
     commentstyle=\color{vgreen},
@@ -29,9 +32,25 @@
 }
 
 
+% Simple command to make figures for an image
+\newcommand{\InsertImage}[3][\linewidth]{
+	% Argument #1 (optional) = width of the image
+	% Argument #2 = path to image
+	% Argument #3 = caption for the image
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=#1]{#2}
+		\caption{#3}
+	\end{figure}
+}	
 
-
-
+% Same as '\InsertImage', but with \FloatBarriers to keep the 
+% figure from being moved around
+\newcommand{\InsertImageHere}[3][\linewidth]{
+	\FloatBarrier
+	\InsertImage[#1]{#2}{#3}
+	\FloatBarrier
+}
 
 
 
@@ -43,6 +62,7 @@
 
 \begin{document}
 
+% Title Page 
 \begin{titlepage}
 	\begin{center}
 		{\Large
@@ -83,10 +103,10 @@
 	\end{center}
 \end{titlepage}
 
+%% Table of Contents Page
 \tableofcontents
 
-
-%%%%%% DESIGN APPROACH %%%%%%
+%%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
 
@@ -104,11 +124,36 @@
 \newpage
 \section{Results and Analysis}
 
+%%% DESIGN SIMULATION
 \subsection{Design Simulation}
 
+% lab 1
+\subsubsection{8-Bit Adder}
+
+\InsertImageHere{images/simulations/lab1/simulation.png}{Simulation results for lab 1, \textbf{8-Bit Adder}.}
+
+% lab 2
+\subsubsection{Partial Arithmetic and Logic Unit}
+
+\InsertImageHere{images/simulations/lab2/simulation.png}{Simulation results for lab 2, \textbf{Partial Arithmetic and Logic Unit}.}
+
+% lab 3
+\subsubsection{Arithmetic and Logic Unit}
+
+\InsertImageHere{images/simulations/lab3/simulation.png}{Simulation results for lab 3, \textbf{Arithmetic Logic Unit}.}
+
+
+%%% HARDWARE TESTING
 \subsection{Hardware Testing}
 
+% lab 1
+\subsubsection{8-Bit Adder}
 
+% lab 2
+\subsubsection{Partial Arithmetic and Logic Unit}
+
+% lab 3
+\subsubsection{Arithmetic and Logic Unit}
 
 
 %%%%%% CONCLUSIONS %%%%%%
@@ -118,11 +163,71 @@
 
 
 %%%%%% APPENDICES %%%%%%
+\newpage
+% start appendix 
 \appendix
-\section{Lab 3 ALU Verilog Module}
-\lstinputlisting[style=verilog-style]{verilog/eightbit_alu.v}
+% explicit 'Appendix' in title before appendix sections
+\appendixpage
+% explicit 'Appendix' in table of contents
+\addappheadtotoc 
 
 
+\section{8-Bit Adder Module: \texttt{eightbit\_adder.v}}
+\FloatBarrier
+\begin{figure}[h]
+	\lstinputlisting[style=verilog-style]{verilog/eightbit_adder.v}
+	\caption{\texttt{eightbit\_adder.v} implementing an 8-bit adder in Verilog.}
+\end{figure}
+\FloatBarrier
+
+
+\newpage
+\section{Partual ALU Verilog Module: \texttt{eightbit\_palu.v}}
+\FloatBarrier
+\begin{figure}[h]
+	\lstinputlisting[style=verilog-style]{verilog/eightbit_palu.v}
+	\caption{\texttt{eightbit\_palu.v} implementing an 8-bit partial ALU in Verilog.}
+\end{figure}
+\FloatBarrier
+
+
+\newpage
+\section{ALU Verilog Module: \texttt{eightbit\_alu.v}}
+\FloatBarrier
+\begin{figure}[h]
+	\lstinputlisting[style=verilog-style]{verilog/eightbit_alu.v}
+	\caption{\texttt{eightbit\_alu.v} implementing an 8-bit ALU in Verilog.}
+\end{figure}
+\FloatBarrier
+
+\newpage
+\section{Hardware Test Results for Lab 1: 8-Bit Adder}
+\FloatBarrier
+\InsertImage[0.6\linewidth]{images/hardware/lab1/case-0.jpg}{First test case.}
+\InsertImage[0.6\linewidth]{images/hardware/lab1/case-1.jpg}{Second test case.}
+\FloatBarrier
+\newpage
+\section{Hardware Test Results for Lab 2: Partial Arithmetic Logic Unit}
+\FloatBarrier
+\InsertImage[0.6\linewidth]{images/hardware/lab2/case-0.jpg}{First test case.}
+\InsertImage[0.6\linewidth]{images/hardware/lab2/case-1.jpg}{Second test case.}
+\InsertImage[0.6\linewidth]{images/hardware/lab2/case-2.jpg}{Third test case.}
+\InsertImage[0.6\linewidth]{images/hardware/lab2/case-3.jpg}{Fourth test case.}
+\InsertImage[0.6\linewidth]{images/hardware/lab2/case-4.jpg}{Fifth test case.}
+\FloatBarrier
+\newpage
+\section{Hardware Test Results for Lab 3: Arithmetic Logic Unit}
+\FloatBarrier
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-0.png}{First test case   -- $a + b$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-1.png}{Second test case  -- $\textasciitilde b$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-2.png}{Third test case   -- $a \cdot b$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-3.png}{Fourth test case  -- $a | b$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-4.png}{Fifth test case   -- $a >>> 1$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-5.png}{Sixth test case   -- $a << 1$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-6.png}{Seventh test case -- $beq(a, b)~~~(a \neq b)$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-7.png}{Eighth test case  -- $beq(a, b)~~~(a = b)$.}
+\InsertImage[0.9\linewidth]{images/hardware/lab3/case-8.png}{Ninth test case   -- $bne(a, b)~~~(a = b)$.}
+\FloatBarrier
 
 
 \end{document}
