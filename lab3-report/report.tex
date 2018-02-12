@@ -5,6 +5,7 @@
 \usepackage{titling}
 \usepackage{xcolor}
 \usepackage{appendix}
+\usepackage{setspace}
 % so that we can use \FloatBarrier to keep figures from being
 % moved to weird spots
 \usepackage{placeins}
@@ -109,8 +110,9 @@
 %%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
-The goal of the following experiments is implement a simple 8-
-
+\begin{flushleft}
+\doublespacing The objective of the series of Lab 1, 2, and 3 were to become familiarized with Verilog hardware descriptions (Xilinx) and use Verilog code to implmenet small features on Zedboard hardware. The goals of the following experiments were to implement a simple 8-bit adder, a partial arithmetic logic unit (ALU), and a full ALU by extending partial ALU. The Verilog code was first written and tested in the Xilinix platform, and then a bitstream was be generated for the hardware testing on the Zedboard, and functionality was verified on the board.
+\end{flushleft}
 
 
 %%%%%% DESIGN APPROACH %%%%%%
