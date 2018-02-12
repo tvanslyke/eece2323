@@ -5,11 +5,19 @@
 \usepackage{titling}
 \usepackage{xcolor}
 \usepackage{appendix}
+
+% for referencing items in the appendices with clickable links
+\usepackage[ 
+  colorlinks=true, 
+  filecolor=cyan, 
+]{hyperref}
 % so that we can use \FloatBarrier to keep figures from being
 % moved to weird spots
 \usepackage{placeins}
+
 % Palatino font for text and math 
 \usepackage{mathpazo}
+
 % Bera Mono font for monospace text (code blocks)
 \usepackage[scaled]{beramono}
 \usepackage[T1]{fontenc}
@@ -109,9 +117,9 @@
 %%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
-The goal of the following experiments is implement a simple 8-
+The goal of the following experiments is implement a simple 8-bit Arithmetic Logic Unit (ALU) using the Verilog Hardware Description Language (HDL).  This implementation will be tested both in a software simulation use Xilinx Vivado, and in hardware on a ZedBoard with an integrated Field-Programmable Gate Array (FPGA)\footnote{The particular FPGA used is the Xilinx XC7Z020CLG484-1.}.  In our experiments, we bootstrap our design up from a simple adder circuit to an ALU capable of working with 8-bit integers, providing an instruction set of size 8.  
 
-
+By exploring this process, we wish to explore the basics of digital design by providing a minimal example of an ALU.  \todo{Expand on this.}
 
 %%%%%% DESIGN APPROACH %%%%%%
 \newpage
@@ -119,11 +127,26 @@ The goal of the following experiments is implement a simple 8-
 
 \subsection{Software Used}
 \begin{itemize}
-	\item Xilinx Vivado - 
-	\item Icarus Verilog - 
+	\item Xilinx Vivado - Xilinx Vivado was used to perform all model simulations, including testbenches.  Additionally, Xilinx Vivado provided the means with which our models were uploaded onto the ZedBoard FPGAs.
+	\item Icarus Verilog - Icarus Verilog was used for rapid development and verification of several of the modules used in our experiments.
 \end{itemize}
 
 \subsection{Logic Design in Verilog Code}
+Since both the partial \href{eightbit_partial_alu_module}{partial ALU} and \href{eightbit_alu_module}{full ALU} have an overflow (\texttt{ovf}) output bit that depends on the computed result of the ALU's \texttt{ADD} (\texttt{s}=0) operation, blocking assignment is used to compute \texttt{f} and \texttt{ovf}.  A non-blocking assignment would allow incorrect behavior by not obeying the dependency relationship between \texttt{f} and \texttt{ovf}.  It is worth noting that the \texttt{take\_branch} output bit in the full ALU could be set via a continuous assignment like so:
+\begin{lstlisting}[style=verilog-style]
+	// requires 'take_branch' to be declared as a 'wire'
+	assign take_branch = ((s == 6) && (a == b)) || ((s == 7) && (a != b));
+\end{lstlisting}
+However, for the sake of consistency, we opt for a blocking assignment in the same \texttt{always} block as \texttt{f} and \texttt{ovf}.
+
+The Verilog module definitions for the eight-bit adder, eight-bit partial ALU, and the eightbit ALU can respectively be found in the appendix sections \href{eightbit_adder_module}{A}, \href{eightbit_partial_alu_module}{B}, and \href{eightbit_alu_module}{C}.
+
+Opcode dispatch is implemented in Verilog using a \texttt{case} statement which handles each instruction individually.  The \texttt{take\_branch} and \texttt{ovf} output bits in the eight-bit ALU are handled outside of the \texttt{case} statement, since they have consistent behavior in most cases.  For example, the \texttt{ovf} bit is set using the following statement:
+\begin{lstlisting}[style=verilog-style]
+	ovf = (s == 0) && (f[7] != a[7]) && (f[7] != b[7]);
+\end{lstlisting}
+This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutated within it. 
+
 
 
 %%%%%% RESULTS AND ANALYSIS %%%%%%
@@ -132,10 +155,8 @@ The goal of the following experiments is implement a simple 8-
 
 
 
-
 %%% DESIGN SIMULATION
 \subsection{Design Simulation}
-
 
 % lab 1
 \subsubsection{8-Bit Adder}
@@ -186,7 +207,7 @@ The goal of the following experiments is implement a simple 8-
 \addappheadtotoc 
 
 
-\section{8-Bit Adder Module: \texttt{eightbit\_adder.v}}
+\section{8-Bit Adder Module: \texttt{eightbit\_adder.v}} \label{eightbit_adder_module}
 \FloatBarrier
 \begin{figure}[h]
 	\lstinputlisting[style=verilog-style]{verilog/eightbit_adder.v}
@@ -196,7 +217,7 @@ The goal of the following experiments is implement a simple 8-
 
 
 \newpage
-\section{Partual ALU Verilog Module: \texttt{eightbit\_palu.v}}
+\section{Partual ALU Verilog Module: \texttt{eightbit\_palu.v}} \label{eightbit_partial_alu_module}
 \FloatBarrier
 \begin{figure}[h]
 	\lstinputlisting[style=verilog-style]{verilog/eightbit_palu.v}
@@ -206,7 +227,7 @@ The goal of the following experiments is implement a simple 8-
 
 
 \newpage
-\section{ALU Verilog Module: \texttt{eightbit\_alu.v}}
+\section{ALU Verilog Module: \texttt{eightbit\_alu.v}} \label{eightbit_alu_module}
 \FloatBarrier
 \begin{figure}[h]
 	\lstinputlisting[style=verilog-style]{verilog/eightbit_alu.v}

@@ -7,6 +7,6 @@ module eightbit_palu(
 	always @(a, b) begin
 		f = a + b;
 		// overflow check for addition
-		ovf = (s == 0) && (f[7] != a[7]) && (f[7] != b[7]);
+		ovf = (f[7] != a[7]) && (f[7] != b[7]);
 	end
 endmodule
