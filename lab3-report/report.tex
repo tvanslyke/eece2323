@@ -9,8 +9,9 @@
 % for referencing items in the appendices with clickable links
 \usepackage[ 
   colorlinks=true, 
-  filecolor=cyan, 
+  linkcolor=cyan, 
 ]{hyperref}
+\usepackage{setspace}
 % so that we can use \FloatBarrier to keep figures from being
 % moved to weird spots
 \usepackage{placeins}
@@ -112,43 +113,43 @@
 \end{titlepage}
 
 %% Table of Contents Page
+\hypersetup{linkcolor=black}
 \tableofcontents
+\hypersetup{linkcolor=cyan}
 
 %%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
-The goal of the following experiments is implement a simple 8-bit Arithmetic Logic Unit (ALU) using the Verilog Hardware Description Language (HDL).  This implementation will be tested both in a software simulation use Xilinx Vivado, and in hardware on a ZedBoard with an integrated Field-Programmable Gate Array (FPGA)\footnote{The particular FPGA used is the Xilinx XC7Z020CLG484-1.}.  In our experiments, we bootstrap our design up from a simple adder circuit to an ALU capable of working with 8-bit integers, providing an instruction set of size 8.  
+\begin{flushleft} 
+\doublespacing The objective of the series of Lab 1, 2, and 3 were to become familiarized with Verilog hardware descriptions (Xilinx) and use Verilog code to implmenet small features on Zedboard hardware. The goals of the following experiments were to implement a simple 8-bit adder, a partial arithmetic logic unit (ALU), and a full ALU by extending partial ALU. The Verilog code was first written and tested in the Xilinix platform, and then a bitstream was be generated for the hardware testing on the Zedboard, and functionality was verified on the board.
+\end{flushleft}
 
-By exploring this process, we wish to explore the basics of digital design by providing a minimal example of an ALU.  \todo{Expand on this.}
+
 
 %%%%%% DESIGN APPROACH %%%%%%
 \newpage
 \section{Design Approach}
 
+
+\subsection{Logic Design in Verilog Code}
+
+
+The purpose of an 8-bit adder was to have two inputs of signed 8-bit and produce a signed 8-bit output and an overflow. Overflow was calculated using:
+\begin{equation}
+  ovf = (f[7] != a[7]) \quad\&\&\quad (f[7] != b[7])
+\end{equation}
+Appendix A shows details of the code used.
+
+The partial ALU (PALU) had a 2-bit selector and two 8-bit inputs, and the 2-bit selector determined how the output is deteremind. If the selector is 00, the result would be the sum of two 8-bit inputs. If it is 01, the output will be a complement of input b. If it is 10, AND operator logic will apply to the inputs. Finally if it is 11, then OR operator logic will apply. Appendix B shows details of the code used.
+
+Finally the full ALU had a 3-bit selector. Full ALU is an extension of partial ALU, as the selector now has 8 different states. In addition, the full ALU has one more output called $take\_branch$. The selector from 000 to 011 is same as PALU. If the selector is 100, the output is an arithmetic shift right of an input $a$. If it is 101, the output is a logic shift left of an input $a$. If it is 110, the output $f$ is 0, and the $take\_branch$ will be the result of $a == b$. If the selector is 111, the output $f$ will also be 0, but the $take\_branch$ will be the result of $a \neq b$. The full code is shown in Appendix C.
+
 \subsection{Software Used}
 \begin{itemize}
 	\item Xilinx Vivado - Xilinx Vivado was used to perform all model simulations, including testbenches.  Additionally, Xilinx Vivado provided the means with which our models were uploaded onto the ZedBoard FPGAs.
 	\item Icarus Verilog - Icarus Verilog was used for rapid development and verification of several of the modules used in our experiments.
+
 \end{itemize}
-
-\subsection{Logic Design in Verilog Code}
-Since both the partial \href{eightbit_partial_alu_module}{partial ALU} and \href{eightbit_alu_module}{full ALU} have an overflow (\texttt{ovf}) output bit that depends on the computed result of the ALU's \texttt{ADD} (\texttt{s}=0) operation, blocking assignment is used to compute \texttt{f} and \texttt{ovf}.  A non-blocking assignment would allow incorrect behavior by not obeying the dependency relationship between \texttt{f} and \texttt{ovf}.  It is worth noting that the \texttt{take\_branch} output bit in the full ALU could be set via a continuous assignment like so:
-\begin{lstlisting}[style=verilog-style]
-	// requires 'take_branch' to be declared as a 'wire'
-	assign take_branch = ((s == 6) && (a == b)) || ((s == 7) && (a != b));
-\end{lstlisting}
-However, for the sake of consistency, we opt for a blocking assignment in the same \texttt{always} block as \texttt{f} and \texttt{ovf}.
-
-The Verilog module definitions for the eight-bit adder, eight-bit partial ALU, and the eightbit ALU can respectively be found in the appendix sections \href{eightbit_adder_module}{A}, \href{eightbit_partial_alu_module}{B}, and \href{eightbit_alu_module}{C}.
-
-Opcode dispatch is implemented in Verilog using a \texttt{case} statement which handles each instruction individually.  The \texttt{take\_branch} and \texttt{ovf} output bits in the eight-bit ALU are handled outside of the \texttt{case} statement, since they have consistent behavior in most cases.  For example, the \texttt{ovf} bit is set using the following statement:
-\begin{lstlisting}[style=verilog-style]
-	ovf = (s == 0) && (f[7] != a[7]) && (f[7] != b[7]);
-\end{lstlisting}
-This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutated within it. 
-
-
-
 %%%%%% RESULTS AND ANALYSIS %%%%%%
 \newpage
 \section{Results and Analysis}
@@ -157,35 +158,48 @@ This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutate
 
 %%% DESIGN SIMULATION
 \subsection{Design Simulation}
-
+All simulation tests were done using Xilinx Vivado's simulation environment.  All Verilog modules that were tested were shown to satisfy their respective requirements.
 % lab 1
 \subsubsection{8-Bit Adder}
+Shown here is the software simulation of the 8-Bit Adder module testbench.  A 200ns delay is observed, followed by two trivial test cases where inputs $a$ and $b$ share no common set bits.  Subsequent tests show that the adder module successfully handles cases where there are common set bits in both $a$ and $b$.  The final case shows the overflow condition being obeyed.
 
 \InsertImageHere{images/simulations/lab1/simulation.png}{Simulation results for lab 1, \textbf{8-Bit Adder}.}
 
 % lab 2
 \subsubsection{Partial Arithmetic and Logic Unit}
+Shown here is the software simulation of the 8-Bit Partial ALU module testbench.  The simulation begins with a series of test cases which demonstrate that the \texttt{ADD} ($s = 0$) test case behaves correctly, followed by tests for other operations.  Subsequent tests show that the partial ALU module successfully handles other operations.  The final case shows the overflow condition being obeyed for the \texttt{ADD} ($s = 0$) instruction.
 
 \InsertImageHere{images/simulations/lab2/simulation.png}{Simulation results for lab 2, \textbf{Partial Arithmetic and Logic Unit}.}
 
 % lab 3
 \subsubsection{Arithmetic and Logic Unit}
+Shown here is the software simulation of the 8-Bit ALU module testbench.  The simulation begins with a series of test cases which demonstrate that the \texttt{ADD} ($s = 0$) test case behaves correctly, including a test for the \texttt{ovf} bit.  Subsequent tests show that the ALU module successfully handles operations 1 through 5.  The final four cases show the behavior of the \texttt{BEQ} and \texttt{BNE} instructions.  In order, the four cases show that:
+\begin{itemize}
+\item \texttt{take\_branch} is not set when the instruction is \texttt{BEQ} and $a \neq b$.
+\item \texttt{take\_branch} is set when the instruction is \texttt{BNE} and $a \neq b$.
+\item \texttt{take\_branch} is set when the instruction is \texttt{BEQ} and $a =  b$.
+\item \texttt{take\_branch} is not set when the instruction is \texttt{BNE} and $a = b$.
+\end{itemize}
+
 
 \InsertImageHere{images/simulations/lab3/simulation.png}{Simulation results for lab 3, \textbf{Arithmetic Logic Unit}.}
 
 
 %%% HARDWARE TESTING
 \subsection{Hardware Testing}
-
+Here we discuss our methods for testing our models in hardware. All hardware testing was done on a ZedBoard with an integrated Field-Programmable Gate Array (FPGA)\footnote{The particular FPGA used is the Xilinx XC7Z020CLG484-1.}.  
 
 % lab 1
 \subsubsection{8-Bit Adder}
+The eight-bit adder was tested using the ZedBoard's on-board switches to partially manipulate the inputs.  Switches 0 through 3 control bits 0, 5, 6, and 7 of the first operand while switches 4 through 7 control bits 0, 5, 6, and 7 of the second operand.  The hardware testing results can be seen in the \hyperref[lab1_hardware]{8-Bit Adder section} of the appendix.
 
 % lab 2
 \subsubsection{Partial Arithmetic and Logic Unit}
+The eight-bit partial ALU was tested using the ZedBoard's on-board switches to partially manipulate the inputs.  Switches 0 and 1 control bits bits 0 and 1 of the instruction (\texttt{s}) input.  Switches 2 through 4 control bits 0, 6, and 7 of the first operand while 5 through 7 control bits 0, 6, and 7 of the second operand.  The hardware testing results can be seen in the \hyperref[lab2_hardware]{8-Bit Partial ALU section} of the appendix.
 
 % lab 3
 \subsubsection{Arithmetic and Logic Unit}
+The eight-bit partial ALU was tested using the Virtual Input/Ouput (VIO) functionality provided by Xilinx Vivado.  This proved to be a more effecient way of testing the hardware behavior of our modules.  A comprehensive suite of test cases was performed to ensure that all input and output bits were either set or unset during at least one test case.  The The hardware testing results can be seen in the \hyperref[lab3_hardware]{8-Bit ALU section} of the appendix.
 
 
 
@@ -193,6 +207,7 @@ This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutate
 %%%%%% CONCLUSIONS %%%%%%
 \newpage
 \section{Conclusions}
+The first three Lab sessions introduced the basics of Verilog and the functionalities of the hardware Zedboard. Implementation of logics with Verilog and verification of the logics through the FPGA on the ZedBoard were explored. The results came out successful. In future lab, the knowledge of thorough testing and effectively utilizing the software obtained from this lab would be useful.  
 
 
 
@@ -237,7 +252,7 @@ This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutate
 
 
 \newpage
-\section{Hardware Test Results for Lab 1: 8-Bit Adder}
+\section{Hardware Test Results for Lab 1: 8-Bit Adder} \label{lab1_hardware}
 \FloatBarrier
 \InsertImage[0.6\linewidth]{images/hardware/lab1/case-0.jpg}{First test case.}
 \InsertImage[0.6\linewidth]{images/hardware/lab1/case-1.jpg}{Second test case.}
@@ -245,7 +260,7 @@ This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutate
 
 
 \newpage
-\section{Hardware Test Results for Lab 2: Partial Arithmetic Logic Unit}
+\section{Hardware Test Results for Lab 2: Partial Arithmetic Logic Unit}\label{lab2_hardware}
 \FloatBarrier
 \InsertImage[0.6\linewidth]{images/hardware/lab2/case-0.jpg}{First test case.}
 \InsertImage[0.6\linewidth]{images/hardware/lab2/case-1.jpg}{Second test case.}
@@ -256,7 +271,7 @@ This simplifies the \texttt{case} structure immensely; only \texttt{f} is mutate
 
 
 \newpage
-\section{Hardware Test Results for Lab 3: Arithmetic Logic Unit}
+\section{Hardware Test Results for Lab 3: Arithmetic Logic Unit}\label{lab3_hardware}
 \FloatBarrier
 \InsertImage[0.9\linewidth]{images/hardware/lab3/case-0.png}{First test case   -- $a + b$.}
 \InsertImage[0.9\linewidth]{images/hardware/lab3/case-1.png}{Second test case  -- $\textasciitilde b$.}
