@@ -1,0 +1,136 @@
+\documentclass[12pt, letterpaper]{article}
+
+\usepackage{placeins}
+\usepackage{appendix}
+\usepackage{todonotes}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{xcolor}
+
+% Palatino font for text and math 
+\usepackage{mathpazo}
+% Bera Mono font for monospace text (code blocks)
+\usepackage[scaled]{beramono}
+\usepackage[T1]{fontenc}
+
+% Syntax highlighting for Verilog code snippets
+\usepackage{listings}
+\definecolor{vgreen}{RGB}{104,180,104}
+\definecolor{vblue}{RGB}{49,49,255}
+\definecolor{vorange}{RGB}{255,143,102}
+
+\lstdefinestyle{verilog-style}
+{
+    language=Verilog,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{vblue},
+    identifierstyle=\color{black},
+    commentstyle=\color{vgreen},
+    tabsize=2,  % small tab size so code doesn't run off the right-hand-side margin
+    literate=*{:}{:}1
+}
+
+
+
+
+
+
+
+\title{Lab \# 4 - 5: \textbf{Adding Register File to ALU, Adding Data Memory to the Datapath}}
+
+% I just copied your name as it appeared in gmail - Tim
+\author{Group \# \textbf{14}:\\ Jin Hyeong Kim \and\\ Timothy VanSlyke}
+
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		{\Large
+			\textbf{Northeastern University}\\
+			~\\
+			Department of Electrical and Computer Engineering\\ 
+		}
+
+		\vfill
+
+		{\large
+			EECE2323: \textbf{Digital Systems Design Lab}\\
+			~\\
+			Lecturer: \textbf{Dr. Emad Aboelela}\\
+			~\\
+			TAs:\\
+			\textbf{Ke Chen}\\
+			\textbf{Linbin Chen}\\
+		}
+	
+		\vfill
+
+		{\Large \thetitle}\\
+	
+		\vfill
+
+		{\large \theauthor}\\
+
+		\vfill
+
+		{\large
+			Semester: Spring 2018\\
+			Date: \today\\
+			Lab Session: Tuesday, 1:00PM\\ 
+			Lab Location: 9 Hayden Hall, Northeastern University, Boston, MA 02115\\
+		}
+
+	\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+
+%%%%%% INTRODUCTION %%%%%%
+\newpage
+\section{Introduction}
+
+
+
+
+%%%%%% DESIGN APPROACH %%%%%%
+\newpage
+\section{Design Approach}
+
+
+
+
+%%%%%% RESULTS AND ANALYSIS %%%%%%
+\newpage
+\section{Results and Analysis}
+
+\subsection{Design Simulation}
+
+\subsection{Hardware Testing}
+
+
+
+
+%%%%%% CONCLUSIONS %%%%%%
+\newpage
+\section{Conclusions}
+
+
+
+%%%%%% APPENDICES %%%%%%
+\newpage
+\appendix
+% explicit 'Appendix' in title before appendix sections
+\appendixpage
+% explicit 'Appendix' in table of contents
+\addappheadtotoc 
+\section{A: \texttt{reg\_file.v}} \label{reg_file_module}
+\FloatBarrier
+\begin{figure}[h]
+	\lstinputlisting[style=verilog-style]{verilog/lab4/reg_file.v}
+	\caption{\texttt{reg\_file.v} - 4$\times$9 register file in verilog.}
+\end{figure}
+\FloatBarrier
+
+\end{document}

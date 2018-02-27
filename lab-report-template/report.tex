@@ -1,5 +1,6 @@
 \documentclass[12pt, letterpaper]{article}
 
+\usepackage{appendix}
 \usepackage{todonotes}
 \usepackage{graphicx}
 \usepackage{titling}
@@ -117,7 +118,14 @@
 
 
 %%%%%% APPENDICES %%%%%%
+\newpage
+% start appendix 
 \appendix
+% explicit 'Appendix' in title before appendix sections
+\appendixpage
+% explicit 'Appendix' in table of contents
+\addappheadtotoc 
+
 % \section{ ... }
 
 \end{document}
