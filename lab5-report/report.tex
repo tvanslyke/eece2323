@@ -113,7 +113,9 @@ The registers are read from by setting the \texttt{RegWrite} input bit low and t
 The registers may be written written to by setting the \texttt{RegWrite} input bit high and supplying the desired write address to the \texttt{WriteAddr} input.  The value that is supplied to the \texttt{WriteData} input will then be written to the selected register.
 
 \subsection{Data Memory Design}
+Stores to data memory are done through the usage of the \texttt{ReadData2} output from the ALU.  When the \texttt{MemWrite} flag is set, the output of the ALU, truncated to 8 bits, is used as the address of the word in memory that will be written.  The value of \texttt{ReadData2} is then written to the value at that address.  
 
+Loads from data memory are enabled by setting the \texttt{MemToReg} flag.  This flag switches a multiplexer to output the value of \texttt{DataMemOut}, which is the value in data memory that is resides at the address given by the ALU's output.  Normally, when the \texttt{DataMemOut} flag is \emph{not} set, the multiplexer simply forwards the full, 9-bit (including the ovf flag) output from the ALU to its own output.  In either case, this multiplexer's output is wired directly to the \texttt{WriteData} input of the register file.  In order to successfully complete a load operation, the above conditions must be met and additionally the \texttt{RegWrite} flag must be set.  This last condition ensures that the register file writes the word read from data memory.
 
 %%%%%% RESULTS AND ANALYSIS %%%%%%
 \newpage
