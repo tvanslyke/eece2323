@@ -98,7 +98,7 @@ In these experiments, we will investigate the problem of introducing stateful co
 \caption{Simplified/minimalist diagram of a computer system with registers and data memory.}
 \end{figure}
 
-A minimalist memory ei
+A basic memory heirarchy can be implemented by restricting the ALU's operands to be obtained only from registers, while also restricting loads and stores to data memory to only be accessible through registers.  In our experiments, we implement this model with the small caveat that linear memory addressing is implmented by using the ALU's output as the address at which loads and stores from and to data memory are done.
 
 
 
