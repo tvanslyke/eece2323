@@ -105,8 +105,14 @@ A basic memory heirarchy can be implemented by restricting the ALU's operands to
 %%%%%% DESIGN APPROACH %%%%%%
 \newpage
 \section{Design Approach}
+\subsection{Register File Design}
+To address the problem of supplying mutable registers to the digital system, a $4 \times 9$ array of machine words is encapsulated within a Veriolog module.  This implements the CPU's register file, supplying a total 4 registers, each capable of persistently storing a 9 bit word\footnote{Note that we take a 9-bit integer to be a machine word here, but the ALU itself operates on 8-bit words.  The 9th bit in the exists to support storing the special ALU flags \texttt{ovf} and \texttt{take\_branch}, without loss of information.}.  In Verilog, the array of words is not exposed directly.  The registers may either be written to one-at-a-time or read from two-at-a-time, but not both simultaneously.  This protection mechanism prevents simultaneous reads and writes from the same address and avoids deadlock.  
 
+The registers are read from by setting the \texttt{RegWrite} input bit low and then supplying the desired addresses (an index $i \in [0, 4)$) to the \texttt{ReadAddr1} and \texttt{ReadAddr2} inputs.  The respective outputs of the register file then expose the contents at the requested addresses.  Note that in our first experiment, the corresponding outputs, \texttt{ReadData1} and \texttt{ReadData2}, are only usasble as ALU operands, and each must be enabled as an input by setting \texttt{AluSrc1} and \texttt{AluSrc2} to $0$.  This must be done because each of the ALU inputs is guarded by a multiplexer: the first multiplexer feeds the value $8'b0$ when it is in the high state, while the other multiplexer feeds an immediate operand from the \texttt{Instr\_i} input when it is in the high state.  In our second experiment, \texttt{ReadData2} does double duty as the value that is written to data memory when a store operation occurs. 
 
+The registers may be written written to by setting the \texttt{RegWrite} input bit high and supplying the desired write address to the \texttt{WriteAddr} input.  The value that is supplied to the \texttt{WriteData} input will then be written to the selected register.
+
+\subsection{Data Memory Design}
 
 
 %%%%%% RESULTS AND ANALYSIS %%%%%%
@@ -133,6 +139,7 @@ A basic memory heirarchy can be implemented by restricting the ALU's operands to
 
 \FloatBarrier
 \subsubsection{Hardware Test Results for the Data Memory Simulation}
+
 \begin{figure}[h]
 \includegraphics[width=\linewidth]{images/lab5-results-1.png}
 \caption{Hardware results for the data memory implementation.  This image shows the desired contents of the first two registers after running the test instruction sequence in the second experiment.}
