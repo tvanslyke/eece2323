@@ -90,7 +90,15 @@
 %%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
+In these experiments, we will investigate the problem of introducing stateful components to our existing computer system.  Specifically, the system will gain persistent storage media in the form of registers and data memory (main memory/random-access memory).  In order to support imperitive computation, it is necessary that a computer system provide methods of storing, accessing, and modifying persistent state.  Modern CPU architectures typically provide a finite set of registers which may be used to store machine words across the execution of multiple instructions.  Additionally, and while not typically considered to be part of the CPU itself, data memory is used to provide a conceptually infinite (but finite in practice) storage medium to the computer system.  
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=.7\linewidth]{images/simple-stateful-cpu.png}
+\caption{Simplified/minimalist diagram of a computer system with registers and data memory.}
+\end{figure}
+
+A minimalist memory ei
 
 
 
@@ -125,12 +133,22 @@
 \appendixpage
 % explicit 'Appendix' in table of contents
 \addappheadtotoc 
-\section{A: \texttt{reg\_file.v}} \label{reg_file_module}
+
+\section{\texttt{reg\_file.v}} \label{reg_file_module}
 \FloatBarrier
 \begin{figure}[h]
-	\lstinputlisting[style=verilog-style]{verilog/lab4/reg_file.v}
-	\caption{\texttt{reg\_file.v} - 4$\times$9 register file in verilog.}
+	\lstinputlisting[style=verilog-style]{verilog/reg_file.v}
+	\caption{\texttt{reg\_file.v} - 4$\times$9 register file implementation in verilog.}
 \end{figure}
 \FloatBarrier
+
+\section{\texttt{eightbit\_alu.v}} \label{eightbit_alu}
+\FloatBarrier
+\begin{figure}[h]
+	\lstinputlisting[style=verilog-style]{verilog/eightbit_alu.v}
+	\caption{\texttt{eightbit\_alu.v} - 8-bit ALU in implementation in verilog.}
+\end{figure}
+\FloatBarrier
+
 
 \end{document}

@@ -18,13 +18,11 @@ module alu_regfile(
 	output wire [7:0] input1,
 	output wire [7:0] input2,
 	output wire ovf,
-	output wire take_branch
+	output wire take_branch,
+	output wire [8:0] reg_data0,
+	output wire [8:0] reg_data1
 );
-	// reg file outpus
-	wire [8:0] reg_data0;
-	wire [8:0] reg_data1;
 	// mux'd inputs to alu
-
 	// register file instantiation
 	reg_file RegFile(
 		.rst(rst),
