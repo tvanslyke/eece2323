@@ -13,7 +13,7 @@ module inst_decode_tb();
 	wire RegWrite;
 	wire ALUSrc1;
 	wire ALUSrc2;
-	reg [2:0]ALUOp;
+	wire [2:0]ALUOp;
 	wire MemWrite;
 	wire MemToReg; 
 	
@@ -39,7 +39,7 @@ module inst_decode_tb();
 		instr = 16'b0000_01_01_01_000000; // R
 		instr = 16'b0000_00_00_00000000; // I
 		instr = 16'b0000_00_00_00000000; // J
-		
+		$monitor("instr = %b, rs_addr = %b, rt_addr = %b, opcode = %b, immediate = %b, RegDst = %b, RegWrite = %b, ALUSrc1 = %b, ALUSrc2 = %b, ALUOp = %b, MemWrite = %b, MemToReg = %b", instr, rs_addr, rt_addr, opcode, immediate, RegDst, RegWrite, ALUSrc1, ALUSrc2, ALUOp, MemWrite, MemToReg);
 		#10
 		instr = 16'b0000_00_00_00000000; // LW
 		#10
@@ -72,5 +72,3 @@ module inst_decode_tb();
 	end
 endmodule
 		
-	end
-endmodule

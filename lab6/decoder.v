@@ -2,20 +2,19 @@
 
 
 module Decoder(
-	input instr[15:0],
-	output 
-	opcode[3:0],
-	rs_addr[1:0],
-	rt_addr[1:0],
-	rd_addr[1:0],
-	immediate[7:0],
-	RegDst,
-	RegWrite,
-	ALUSrc1,
-	ALUSrc2,
-	ALUOp[2:0],
-	MemWrite,
-	MemToReg
+	input [15:0]instr,
+	output [3:0]opcode,
+	output [1:0]rs_addr,
+	output [1:0]rt_addr,
+	output [1:0]rd_addr,
+	output [7:0]immediate,
+	output reg RegDst,
+	output reg RegWrite,
+	output reg ALUSrc1,
+	output reg ALUSrc2,
+	output reg [2:0]ALUOp,
+	output reg MemWrite,
+	output reg MemToReg
 );
 	localparam LW   = 4'b0000;
 	localparam SW   = 4'b0001;
@@ -38,7 +37,7 @@ module Decoder(
 	assign rd_addr = instr[7:6];
 	assign immediate = instr[7:0];
 	
-	always @ begin
+	always @(*) begin
 		case(opcode) 
 			LW  : begin 
 				ALUOp    <= 3'b000;
