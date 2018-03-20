@@ -1,8 +1,4 @@
-
-
-
-module Decoder(
-	input [15:0]instr,
+nput [15:0]instr,
 	output [3:0]opcode,
 	output [1:0]rs_addr,
 	output [1:0]rt_addr,
@@ -79,14 +75,14 @@ module Decoder(
 				ALUOp <= 3'b001;
 				RegDst   <= 1'b1;
 				RegWrite <= 1'b1;
-				ALUSrc1  <= 1'b0;
+				//ALUSrc1  <= 1'b0;
 				ALUSrc2  <= 1'b0;
 				MemWrite <= 1'b0;
 				MemToReg <= 1'b0;
 			end
 			AND : begin 
 				ALUOp <= 3'b010;
-				RegDst   <= 1'b0;
+				RegDst   <= 1'b1;
 				RegWrite <= 1'b1;
 				ALUSrc1  <= 1'b0;
 				ALUSrc2  <= 1'b0;
@@ -95,8 +91,8 @@ module Decoder(
 			end
 			ANDI: begin 
 				ALUOp <= 3'b010;
-				RegDst   <= 1'b1;
-				RegWrite <= 1'b0;
+				RegDst   <= 1'b0;
+				RegWrite <= 1'b1;
 				ALUSrc1  <= 1'b0;
 				ALUSrc2  <= 1'b1;
 				MemWrite <= 1'b0;
@@ -125,7 +121,7 @@ module Decoder(
 				RegDst   <= 1'b0;
 				RegWrite <= 1'b1;
 				ALUSrc1  <= 1'b0;
-				ALUSrc2  <= 1'b1;
+				//ALUSrc2  <= 1'b1;
 				MemWrite <= 1'b0;
 				MemToReg <= 1'b0;
 			end
@@ -134,7 +130,7 @@ module Decoder(
 				RegDst   <= 1'b0;
 				RegWrite <= 1'b1;
 				ALUSrc1  <= 1'b0;
-				ALUSrc2  <= 1'b0;
+				//ALUSrc2  <= 1'b0;
 				MemWrite <= 1'b0;
 				MemToReg <= 1'b0;
 			end
@@ -167,12 +163,5 @@ module Decoder(
 			end
 		endcase
 	end
-
-	
-
-
-
-
-
-
 endmodule
+
