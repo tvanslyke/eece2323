@@ -1,4 +1,5 @@
-nput [15:0]instr,
+module Decoder(
+	input [15:0]instr,
 	output [3:0]opcode,
 	output [1:0]rs_addr,
 	output [1:0]rt_addr,
