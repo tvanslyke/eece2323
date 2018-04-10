@@ -32,7 +32,8 @@ sll $0, $0, 0x1
 sra $1, $1, 0x1
 bne $1, $2, mult_loop
 lw $0, 0x1($2)
-lw $0, 0x2($2)
+lw $1, 0x2($2)
+
 andi $0, $0, 0x80
 andi $1, $1, 0x80
 inv $2, $0
