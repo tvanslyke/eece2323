@@ -84,11 +84,61 @@
 %%%%%% INTRODUCTION %%%%%%
 \newpage
 \section{Introduction}
+In these experiments, we will investigate the problem of introducing an instruction dispatch system to our existing computer.  We will implement a minimal instruction set architecture (ISA) with a MIPS-inspired encoding and mnemonics.  We will equip our computer with an instruction decoder, a persistent instruction memory component, and facilities for conditional instruction jumps.  The instruction decoder, instruction memory + program counter, and branching facilities will be implemented in Verilog and merged into our existing design.
 
+Our experiments will demonstrate the feasibility of our system by showing hardware testing of manual single-instruction dispatch, and automatic, sequential, multiple-instruction dispatch from instruction memory.  Additionally, we will show that our computer is capable of executing arbitrary programs written in our MIPS-like assembly language.  
 
 %%%%%% DESIGN APPROACH %%%%%%
 \newpage
 \section{Design Approach}
+
+\subsection{Instruction Set Architecture}
+Our ISA encoding follows the conventions of MIPS with R-Type, I-Type, and J-Type instruction categories.  Since our computer cannot correctly implement the MIPS computer model, our encoding diverges slightly from the traditional MIPS encoding. 
+
+We choose to encode our instructions in a 16-bit double word.  Since our computer has only 4 registers, all encodings of source and destination registers use 2-bit slices of the 16-bit encoding.  Our limited instruction set allows us to encode all ALU op-codes in only 4-bit slices.  The R-Type instruction encoding concatenates (from MSB to LSB) a 4-bit op-code followed by three 2-bit register encodings.  The first encoded register is the first source register, the second encoded register is the second source register, and the last register is the destination register in which the ALU output is stored.  The last six unused padding bits are zeroed in all R-Type encodings.
+\begin{figure}[h]
+\centering
+\begin{tabular}{|r|r|r|r|r|}
+\hline
+Opcode & RS     & RT     & RD     & Padding \\
+\hline
+4 Bits & 2 Bits & 2 Bits & 2 Bits & 6 Bits \\ 
+\hline
+\end{tabular}
+\caption{Encoding of an R-Type instruction for our ISA.}
+\end{figure}
+
+Both I-Type and J-Type encodings are identical in their format.  A 4-bit opcode precedes the source and destination register encodings.  The last 8 bits are used to encode a single-word immediate which is interpreted as an 8-bit two's complement signed integer.  For I-Type instructions, this immediate is a numeric literal used by the ALU to perform its computation, while for J-Type instructions, the immediate is the signed distance to the jump destination.
+\begin{figure}[h]
+\centering
+\begin{tabular}{|r|r|r|r|}
+\hline
+Opcode & RS     & RT     & Immediate \\ 
+\hline
+4 Bits & 2 Bits & 2 Bits & 8 Bits \\
+\hline
+\end{tabular}
+\caption{Encoding of an I-Type instruction for our ISA.}
+\end{figure}
+
+\subsection{Implementing the ISA in Hardware}
+Our instruction dispatch 
+
+
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{|r|r|r|r|}
+\hline
+Opcode & RS     & RT     & Immediate \\ 
+\hline
+4 Bits & 2 Bits & 2 Bits & 8 Bits \\ 
+\hline
+\end{tabular}
+\caption{Encoding of a J-Type instruction for our ISA.}
+\end{figure}
+
+
 
 
 %%%%%% RESULTS AND ANALYSIS %%%%%%
@@ -98,10 +148,23 @@
 \subsection{Design Simulation}
 
 \subsection{Hardware Testing}
+\FloatBarrier
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{images/lab8-hardware-test-1.png}
+\caption{Hardware VIO testing results.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{images/lab8-hardware-test-2.png}
+\caption{Hardware test showing software multiply implementation giving the result -34.}
+\end{figure}
 
 
 %%%%%% CONCLUSIONS %%%%%%
-\newpage
+\FloatBarrier\newpage
 \section{Conclusions}
 
 
